@@ -1,4 +1,14 @@
 Weebly::Application.routes.draw do
+  resources :nav_points
+
+  resources :nav_contents
+
+  resources :image_contents
+
+  resources :title_contents
+
+  resources :contents
+
   resources :elements
 
   resources :pages

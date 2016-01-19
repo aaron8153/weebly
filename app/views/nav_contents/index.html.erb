@@ -1,0 +1,27 @@
+<h1>Listing nav_contents</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Content</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @nav_contents.each do |nav_content| %>
+      <tr>
+        <td><%= nav_content.content_id %></td>
+        <td><%= link_to 'Show', nav_content %></td>
+        <td><%= link_to 'Edit', edit_nav_content_path(nav_content) %></td>
+        <td><%= link_to 'Destroy', nav_content, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Nav content', new_nav_content_path %>

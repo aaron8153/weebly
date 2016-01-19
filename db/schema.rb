@@ -11,7 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160119190045) do
+ActiveRecord::Schema.define(version: 20160119210040) do
+
+  create_table "contents", force: true do |t|
+    t.integer  "element_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "elements", force: true do |t|
     t.string   "content_type"
@@ -20,7 +26,35 @@ ActiveRecord::Schema.define(version: 20160119190045) do
     t.datetime "updated_at"
   end
 
+  create_table "image_contents", force: true do |t|
+    t.integer  "content_id"
+    t.string   "uri"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "nav_contents", force: true do |t|
+    t.integer  "content_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "nav_points", force: true do |t|
+    t.integer  "nav_content_id"
+    t.float    "lat"
+    t.float    "long"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "pages", force: true do |t|
+    t.string   "title"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "title_contents", force: true do |t|
+    t.integer  "content_id"
     t.string   "title"
     t.datetime "created_at"
     t.datetime "updated_at"

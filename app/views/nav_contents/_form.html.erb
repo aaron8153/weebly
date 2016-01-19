@@ -1,0 +1,21 @@
+<%= form_for(@nav_content) do |f| %>
+  <% if @nav_content.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@nav_content.errors.count, "error") %> prohibited this nav_content from being saved:</h2>
+
+      <ul>
+      <% @nav_content.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :content_id %><br>
+    <%= f.number_field :content_id %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
