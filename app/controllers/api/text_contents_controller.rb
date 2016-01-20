@@ -1,3 +1,4 @@
+module Api
 class TextContentsController < ApplicationController
   before_action :set_text_content, only: [:show, :edit, :update, :destroy]
 
@@ -71,4 +72,5 @@ class TextContentsController < ApplicationController
     def text_content_params
       params.require(:text_content).permit(:content_id, :text)
     end
+end
 end

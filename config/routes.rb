@@ -11,9 +11,11 @@ Rails.application.routes.draw do
 
   resources :contents
 
-  resources :pages do
-    resources :elements do
-      resources :contents
+  namespace :api do
+    resources :pages do
+      resources :elements do
+        resources :contents
+      end
     end
   end
 

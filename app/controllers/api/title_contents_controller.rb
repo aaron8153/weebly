@@ -1,3 +1,4 @@
+module Api
 class TitleContentsController < ApplicationController
   before_action :set_title_content, only: [:show, :edit, :update, :destroy]
 
@@ -71,4 +72,5 @@ class TitleContentsController < ApplicationController
     def title_content_params
       params.require(:title_content).permit(:element_id, :title)
     end
+end
 end

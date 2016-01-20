@@ -1,3 +1,4 @@
+module Api
 class NavPointsController < ApplicationController
   before_action :set_nav_point, only: [:show, :edit, :update, :destroy]
 
@@ -71,4 +72,5 @@ class NavPointsController < ApplicationController
     def nav_point_params
       params.require(:nav_point).permit(:nav_content_id, :lat, :long)
     end
+end
 end

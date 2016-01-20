@@ -1,3 +1,4 @@
+module Api
 class ElementsController < ApplicationController
   before_action :set_element, only: [:show, :edit, :update, :destroy]
 
@@ -86,4 +87,5 @@ class ElementsController < ApplicationController
     def element_params
       params.require(:element).permit(:content_type, :page_id)
     end
+end
 end

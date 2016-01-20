@@ -1,3 +1,4 @@
+module Api
 class ImageContentsController < ApplicationController
   before_action :set_image_content, only: [:show, :edit, :update, :destroy]
 
@@ -71,4 +72,5 @@ class ImageContentsController < ApplicationController
     def image_content_params
       params.require(:image_content).permit(:content_id, :uri, :target)
     end
+end
 end

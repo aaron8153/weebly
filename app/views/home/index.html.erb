@@ -1,0 +1,14 @@
+
+<%
+    @pages.each do |p|
+        %>
+        <%= p.inspect %> <br />
+        <%
+           p.elements.each do |elem|
+             %>
+            <%= elem.content.inspect %> <%
+           end
+        %> <br /><br />
+<%
+    end
+%>

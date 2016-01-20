@@ -1,3 +1,4 @@
+module Api
 class ContentsController < ApplicationController
   before_action :set_content, only: [:show, :edit, :update, :destroy]
 
@@ -71,4 +72,5 @@ class ContentsController < ApplicationController
     def content_params
       params.require(:content).permit(:element_id)
     end
+end
 end

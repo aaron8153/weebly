@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
       if registered_user
         return registered_user
       else
+        api_key = ApiKey.create
         user = User.create(name: data["name"],
                            provider:access_token.provider,
                            email: data["email"],

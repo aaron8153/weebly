@@ -1,5 +1,7 @@
 class HomeController < ApplicationController
+  before_action :authenticate_user!
   def index
-    #stuff
+    @pages = Page.all
+
   end
 end

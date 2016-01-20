@@ -1,3 +1,4 @@
+module Api
 class NavContentsController < ApplicationController
   before_action :set_nav_content, only: [:show, :edit, :update, :destroy]
 
@@ -71,4 +72,5 @@ class NavContentsController < ApplicationController
     def nav_content_params
       params.require(:nav_content).permit(:content_id)
     end
+end
 end
