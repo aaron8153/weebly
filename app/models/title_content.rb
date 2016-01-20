@@ -1,4 +1,4 @@
 class TitleContent < ActiveRecord::Base
-  belongs_to :element
+  has_one :element, as: :content
   # element_id, title
 end

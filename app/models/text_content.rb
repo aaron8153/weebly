@@ -1,3 +1,3 @@
 class TextContent < ActiveRecord::Base
-  belongs_to :element
+  has_one :element, as: :content
 end

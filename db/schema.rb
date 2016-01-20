@@ -11,32 +11,29 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160119231826) do
-
-  create_table "contents", force: true do |t|
-    t.integer  "element_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+ActiveRecord::Schema.define(version: 20160119220837) do
 
   create_table "elements", force: true do |t|
     t.string   "content_type"
+    t.integer  "content_id"
     t.integer  "page_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
+  add_index "elements", ["content_id"], name: "index_elements_on_content_id", using: :btree
+  add_index "elements", ["content_type"], name: "index_elements_on_content_type", using: :btree
+  add_index "elements", ["page_id"], name: "index_elements_on_page_id", using: :btree
+
   create_table "image_contents", force: true do |t|
     t.string   "uri"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "element_id"
   end
 
   create_table "nav_contents", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "element_id"
   end
 
   create_table "nav_points", force: true do |t|
@@ -57,14 +54,12 @@ ActiveRecord::Schema.define(version: 20160119231826) do
     t.text     "text"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "element_id"
   end
 
   create_table "title_contents", force: true do |t|
     t.string   "title"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "element_id"
   end
 
   create_table "users", force: true do |t|

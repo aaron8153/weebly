@@ -21,7 +21,9 @@
                output_html = "<span>Value: " + e.text_content.text + "</span>"
              end
            when 'Image'
-             #blah
+             if !(e.image_content.nil? || e.image_content.uri.nil?)
+               output_html = "<img src='" + e.image_content.uri + "' class='image-content-tag' style='height: 50px; width: 50px;' />"
+             end
            when 'Nav'
              #blah
            else

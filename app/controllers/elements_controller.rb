@@ -38,7 +38,7 @@ class ElementsController < ApplicationController
           when 'Text'
             @content = TextContent.create(:element_id => @element.id, :text => params['element']['text_content']['text'])
           when 'Image'
-            #blah
+            @content = ImageContent.create(:element_id => @element.id, :uri => params['element']['image_content']['uri'])
           when 'Nav'
             #blah
         end
