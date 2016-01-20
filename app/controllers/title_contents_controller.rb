@@ -69,6 +69,6 @@ class TitleContentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def title_content_params
-      params.require(:title_content).permit(:content_id, :title)
+      params.require(:title_content).permit(:element_id, :title)
     end
 end

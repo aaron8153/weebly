@@ -4,11 +4,35 @@
   <strong>Title:</strong>
   <%= @page.title %>
 
-  <strong>Elements:</strong>
+  <br />
+  <strong>Elements:</strong><br/>
   <% @page.elements.each do |e| %>
-      <span>Element Id: <%= e.id %></span>
-      <span>Content type: <%= e.content_type %></span>
+      <span>Element Id: <%= e.id %></span> <br />
+      <span>Content type: <%= e.content_type %></span> <br />
+      <%
+         output_html = '<span>Value:</span>'
+         case e.content_type
+           when 'Title'
+             if !(e.title_content.nil? || e.title_content.title.nil?)
+                output_html = "<span>Value: " + e.title_content.title + "</span>"
+             end
+           when 'Text'
+             if !(e.text_content.nil? || e.text_content.text.nil?)
+               output_html = "<span>Value: " + e.text_content.text + "</span>"
+             end
+           when 'Image'
+             #blah
+           when 'Nav'
+             #blah
+           else
+             output_html = ''
+         end
+      %>
+      <%= output_html.html_safe %>
+      <br />
+      <br />
   <% end %>
+  <%= link_to 'Add Elements', new_page_element_path(@page) %>
 </p>
 
 <%= link_to 'Edit', edit_page_path(@page) %> |

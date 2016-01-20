@@ -25,10 +25,25 @@ class ElementsController < ApplicationController
   # POST /elements.json
   def create
     @element = Element.new(element_params)
+    @element.page_id = params[:page_id]
+
 
     respond_to do |format|
       if @element.save
-        format.html { redirect_to @element, notice: 'Element was successfully created.' }
+        @content = nil
+
+        case @element.content_type
+          when 'Title'
+            @content = TitleContent.create(:element_id => @element.id, :title => params['element']['title_content']['title'])
+          when 'Text'
+            @content = TextContent.create(:element_id => @element.id, :text => params['element']['text_content']['text'])
+          when 'Image'
+            #blah
+          when 'Nav'
+            #blah
+        end
+
+        format.html { redirect_to page_element_path(params[:page_id], @element), notice: 'Element was successfully created.' }
         format.json { render action: 'show', status: :created, location: @element }
       else
         format.html { render action: 'new' }

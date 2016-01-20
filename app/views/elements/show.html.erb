@@ -1,14 +1,34 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Type:</strong>
-  <%= @element.content_type %>
-</p>
 
 <p>
   <strong>Page:</strong>
   <%= @element.page_id %>
 </p>
 
-<%= link_to 'Edit', edit_element_path(@element) %> |
-<%= link_to 'Back', elements_path %>
+<p>
+  <strong>Type:</strong>
+  <%= @element.content_type %>
+  <%
+    output_html = nil
+    case @element.content_type
+      when 'Title'
+        output_html = @element.title_content.title
+      when 'Text'
+        output_html = @element.text_content.text
+      when '1'
+        #blah
+      when '2'
+        #blah
+    end
+  %>
+</p>
+
+<h3>Value:</h3>
+<h1>
+    <%= output_html %>
+</h1>
+
+
+<%= link_to 'Edit', edit_page_element_path(@element.page_id, @element) %> |
+<%= link_to 'Back', page_path(@element.page_id) %>

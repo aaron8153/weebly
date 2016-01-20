@@ -1,3 +1,4 @@
-class TitleContent < Content
-  # content_id, title
+class TitleContent < ActiveRecord::Base
+  belongs_to :element
+  # element_id, title
 end

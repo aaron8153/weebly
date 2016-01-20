@@ -3,8 +3,8 @@
 <table>
   <thead>
     <tr>
-      <th>Element</th>
       <th>Content</th>
+      <th>Text</th>
       <th></th>
       <th></th>
       <th></th>
@@ -14,8 +14,8 @@
   <tbody>
     <% @text_contents.each do |text_content| %>
       <tr>
-        <td><%= text_content.element_id %></td>
-        <td><%= text_content.content %></td>
+        <td><%= text_content.content_id %></td>
+        <td><%= text_content.text %></td>
         <td><%= link_to 'Show', text_content %></td>
         <td><%= link_to 'Edit', edit_text_content_path(text_content) %></td>
         <td><%= link_to 'Destroy', text_content, method: :delete, data: { confirm: 'Are you sure?' } %></td>

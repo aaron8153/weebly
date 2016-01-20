@@ -1,4 +1,4 @@
-<%= form_for(@element) do |f| %>
+<%= form_for(@element, :url => page_elements_path(params[:page_id])) do |f| %>
   <% if @element.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@element.errors.count, "error") %> prohibited this element from being saved:</h2>
@@ -13,12 +13,36 @@
 
   <div class="field">
     <%= f.label :content_type %><br>
-    <%= f.text_field :content_type %>
+    <%= f.select :content_type, options_for_select([['Title', 'Title'],['Text', 'Text'],['Image','Image'],['Nav','Nav']]) %>
   </div>
-  <div class="field">
-    <%= f.label :page_id %><br>
-    <%= f.number_field :page_id %>
-  </div>
+
+    <div class="content-input">
+      <div class="content-title">
+        <%= f.fields_for :title_content, @element.title_content do |c| %>
+            <%= c.label :title, 'Title:' %>
+            <%= c.text_field :title %>
+        <% end %>
+      </div>
+      <div class="content-text">
+        <%= f.fields_for :text_content, @element.text_content do |c| %>
+            <%= c.label :text_content, 'Text:' %>
+            <%= c.text_area :text %>
+        <% end %>
+      </div>
+      <div class="content-image">
+        <%= f.fields_for :image_content, @element.image_content do |c| %>
+            <%= c.label 'Image URL' %>
+            <%= c.text_field :uri %>
+        <% end %>
+      </div>
+      <div class="content-nav">
+        <%= f.fields_for :nav_content, @element.nav_content do |c| %>
+            <%= c.label 'Nav Coords' %>
+            <%= c.text_field :lat %>
+            <%= c.text_field :long %>
+        <% end %>
+      </div>
+    </div>
   <div class="actions">
     <%= f.submit %>
   </div>
