@@ -18,25 +18,25 @@
 
     <div class="content-input">
       <div class="content-title">
-        <%= f.fields_for :title_content, @element.title_content do |c| %>
+        <%= f.fields_for :title_content, @element.content do |c| %>
             <%= c.label :title, 'Title:' %>
             <%= c.text_field :title %>
         <% end %>
       </div>
       <div class="content-text">
-        <%= f.fields_for :text_content, @element.text_content do |c| %>
+        <%= f.fields_for :text_content, @element.content do |c| %>
             <%= c.label :text_content, 'Text:' %>
             <%= c.text_area :text %>
         <% end %>
       </div>
       <div class="content-image">
-        <%= f.fields_for :image_content, @element.image_content do |c| %>
+        <%= f.fields_for :image_content, @element.content do |c| %>
             <%= c.label 'Image URL' %>
             <%= c.text_field :uri %>
         <% end %>
       </div>
       <div class="content-nav">
-        <%= f.fields_for :nav_content, @element.nav_content do |c| %>
+        <%= f.fields_for :nav_content, @element.content do |c| %>
             <%= c.label 'Nav Coords' %>
             <%= c.text_field :lat %>
             <%= c.text_field :long %>

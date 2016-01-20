@@ -1,4 +1,4 @@
-Weebly::Application.routes.draw do
+Rails.application.routes.draw do
   resources :text_contents
 
   resources :nav_points
