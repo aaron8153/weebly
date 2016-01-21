@@ -1,4 +1,4 @@
-<%= form_for(@element, :url => page_elements_path(params[:page_id])) do |f| %>
+<%= form_for(@element, :url => api_page_elements_path(params[:page_id])) do |f| %>
   <% if @element.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@element.errors.count, "error") %> prohibited this element from being saved:</h2>

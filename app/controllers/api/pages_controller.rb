@@ -32,7 +32,7 @@ module Api
       respond_to do |format|
         if @page.save
           format.html { redirect_to [:api, @page], notice: 'Page was successfully created.' }
-          format.json { render action: 'show', status: :created, location: @page }
+          format.json { render action: 'show', status: :created, location: api_page_url(@page) }
         else
           format.html { render action: 'new' }
           format.json { render json: @page.errors, status: :unprocessable_entity }

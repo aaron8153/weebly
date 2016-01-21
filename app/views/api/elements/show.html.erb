@@ -12,13 +12,13 @@
   <%
     output_html = ''
     case @element.content_type
-      when 'Title'
-        output_html = @element.title_content.title
-      when 'Text'
-        output_html = @element.text_content.text
-      when 'Image'
-        output_html = "<img src='" + @element.image_content.uri + "' class='image-content-tag' />"
-      when '2'
+      when 'TitleContent'
+        output_html = @element.content.title || ''
+      when 'TextContent'
+        output_html = @element.content.text || ''
+      when 'ImageContent'
+        output_html = "<img src='" + @element.content.uri + "' class='image-content-tag' />"
+      when 'NavContent'
         #blah
       else
         #blah
@@ -27,10 +27,10 @@
 </p>
 
 <h3>Value:</h3>
-<h1>
+<pre>
     <%= output_html.html_safe %>
-</h1>
+</pre>
 
 
-<%= link_to 'Edit', edit_page_element_path(@element.page_id, @element) %> |
-<%= link_to 'Back', page_path(@element.page_id) %>
+<%= link_to 'Edit', edit_api_page_element_path(@element.page_id, @element) %> |
+<%= link_to 'Back', api_page_path(@element.page_id) %>

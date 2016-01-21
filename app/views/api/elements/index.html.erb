@@ -16,9 +16,9 @@
       <tr>
         <td><%= element.content_type %></td>
         <td><%= element.page_id %></td>
-        <td><%= link_to 'Show', element %></td>
-        <td><%= link_to 'Edit', edit_element_path(element) %></td>
-        <td><%= link_to 'Destroy', element, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Show', api_page_element_path(element.page, element) %></td>
+        <td><%= link_to 'Edit', edit_api_page_element_path(element.page, element) %></td>
+        <td><%= link_to 'Destroy', api_page_element_path(element.page, element), method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -26,4 +26,4 @@
 
 <br>
 
-<%= link_to 'New Element', new_element_path %>
+<%= link_to 'New Element', new_api_page_element_path %>

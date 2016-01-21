@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
                            email: data["email"],
                            uid: access_token.uid ,
                            password: Devise.friendly_token[0,20],
+                           api_key: api_key.access_token
         )
       end
     end
