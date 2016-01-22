@@ -42,10 +42,8 @@ module Api
           #Cache bust pages
           Rails.cache.delete("pages")
           format.json { render action: 'show', status: :created, location: api_page_url(@page) }
-          format.xml { render xml: @page, location: api_page_url(@page) }
         else
           format.json { render json: @page.errors, status: :unprocessable_entity }
-          format.xml { render xml: @page.errors }
         end
       end
     end
@@ -60,10 +58,8 @@ module Api
           Rails.cache.delete("pages")
           Rails.cache.delete("page-#{@page.id}")
           format.json { render action: 'show', status: :ok, location: api_page_url(@page) }
-          format.xml { render xml: @page, location: api_page_url(@page) }
         else
           format.json { render json: @page.errors, status: :unprocessable_entity }
-          format.xml { render xml: @page.errors }
         end
       end
     end

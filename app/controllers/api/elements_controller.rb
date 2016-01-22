@@ -53,10 +53,8 @@ module Api
           #Cache bust elements
           Rails.cache.delete("page-#{params[:page_id]}-elements")
           format.json { render action: 'show', status: :created, location: api_page_element_url(params[:page_id], @element) }
-          format.xml { render xml: @element, location: api_page_element_url(params[:page_id], @element) }
         else
           format.json { render json: @element.errors, status: :unprocessable_entity }
-          format.xml { render xml: @element.errors }
         end
       end
     end
@@ -81,28 +79,22 @@ module Api
             if @element.content.update(title_content_params)
               bust_cache_on_update(@element)
               format.json { render action: 'show', status: :ok, location: api_page_element_url(params[:page_id], @element) }
-              format.xml { render xml: @element, location: api_page_element_url(params[:page_id], @element) }
             else
               format.json { render json: @element.errors, status: :unprocessable_entity }
-              format.xml { render xml: @element.errors }
             end
           when 'TextContent'
             if @element.content.update(text_content_params)
               bust_cache_on_update(@element)
               format.json { render action: 'show', status: :ok, location: api_page_element_url(params[:page_id], @element) }
-              format.xml { render xml: @element, location: api_page_element_url(params[:page_id], @element) }
             else
               format.json { render json: @element.errors, status: :unprocessable_entity }
-              format.xml { render xml: @element.errors }
             end
           when 'ImageContent'
             if @element.content.update(image_content_params)
               bust_cache_on_update(@element)
               format.json { render action: 'show', status: :ok, location: api_page_element_url(params[:page_id], @element) }
-              format.xml { render xml: @element, location: api_page_element_url(params[:page_id], @element) }
             else
               format.json { render json: @element.errors, status: :unprocessable_entity }
-              format.xml { render xml: @element.errors }
             end
           when 'NavContent'
             #Placeholder for updating NavContent
@@ -110,10 +102,8 @@ module Api
             if @element.update(element_params)
               bust_cache_on_update(@element)
               format.json { head :no_content }
-              format.xml { render :nothing => true }
             else
               format.json { render json: @element.errors, status: :unprocessable_entity }
-              format.xml { render xml: @element.errors }
             end
         end
 
@@ -128,7 +118,6 @@ module Api
       @element.destroy
       respond_to do |format|
         format.json { head :no_content }
-        format.xml { render :nothing => true }
       end
     end
 
