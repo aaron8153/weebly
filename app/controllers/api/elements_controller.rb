@@ -1,6 +1,6 @@
 module Api
   class ElementsController < ApplicationController
-    before_action :set_element, only: [:show, :edit, :update, :destroy]
+    before_action :set_element, only: [:show, :update, :destroy]
     before_filter :require_api_key
     #CSRF token not necessary for json api
     skip_before_filter :verify_authenticity_token
@@ -12,6 +12,10 @@ module Api
       @elements = data_cache("page-#{params[:page_id]}-elements", 10.minutes) do
         Element.all
       end
+      respond_to do |format|
+        format.json { render action: 'index', status: :ok, location: api_page_elements_url(@elements) }
+        format.xml { render xml: @elements, location: api_page_elements_url(@elements) }
+      end
     end
 
     # GET /elements/1
@@ -21,15 +25,10 @@ module Api
       @element = data_cache("element-#{@element.id}", 10.minutes) do
         Element.find(params[:id])
       end
-    end
-
-    # GET /elements/new
-    def new
-      @element = Element.new
-    end
-
-    # GET /elements/1/edit
-    def edit
+      respond_to do |format|
+        format.json { render action: 'show', status: :ok, location: api_page_element_url(params[:page_id], @element) }
+        format.xml { render xml: @element, location: api_page_element_url(params[:page_id], @element) }
+      end
     end
 
     # POST /elements
@@ -54,8 +53,10 @@ module Api
           #Cache bust elements
           Rails.cache.delete("page-#{params[:page_id]}-elements")
           format.json { render action: 'show', status: :created, location: api_page_element_url(params[:page_id], @element) }
+          format.xml { render xml: @element, location: api_page_element_url(params[:page_id], @element) }
         else
           format.json { render json: @element.errors, status: :unprocessable_entity }
+          format.xml { render xml: @element.errors }
         end
       end
     end
@@ -71,7 +72,7 @@ module Api
         when 'ImageContent'
           @element.content.update(image_content_params)
         when 'NavContent'
-          #blah
+          #Placeholder for NavContent
       end
 
       respond_to do |format|
@@ -80,22 +81,28 @@ module Api
             if @element.content.update(title_content_params)
               bust_cache_on_update(@element)
               format.json { render action: 'show', status: :ok, location: api_page_element_url(params[:page_id], @element) }
+              format.xml { render xml: @element, location: api_page_element_url(params[:page_id], @element) }
             else
               format.json { render json: @element.errors, status: :unprocessable_entity }
+              format.xml { render xml: @element.errors }
             end
           when 'TextContent'
             if @element.content.update(text_content_params)
               bust_cache_on_update(@element)
               format.json { render action: 'show', status: :ok, location: api_page_element_url(params[:page_id], @element) }
+              format.xml { render xml: @element, location: api_page_element_url(params[:page_id], @element) }
             else
               format.json { render json: @element.errors, status: :unprocessable_entity }
+              format.xml { render xml: @element.errors }
             end
           when 'ImageContent'
             if @element.content.update(image_content_params)
               bust_cache_on_update(@element)
               format.json { render action: 'show', status: :ok, location: api_page_element_url(params[:page_id], @element) }
+              format.xml { render xml: @element, location: api_page_element_url(params[:page_id], @element) }
             else
               format.json { render json: @element.errors, status: :unprocessable_entity }
+              format.xml { render xml: @element.errors }
             end
           when 'NavContent'
             #Placeholder for updating NavContent
@@ -103,8 +110,10 @@ module Api
             if @element.update(element_params)
               bust_cache_on_update(@element)
               format.json { head :no_content }
+              format.xml { render :nothing => true }
             else
               format.json { render json: @element.errors, status: :unprocessable_entity }
+              format.xml { render xml: @element.errors }
             end
         end
 
@@ -119,6 +128,7 @@ module Api
       @element.destroy
       respond_to do |format|
         format.json { head :no_content }
+        format.xml { render :nothing => true }
       end
     end
 

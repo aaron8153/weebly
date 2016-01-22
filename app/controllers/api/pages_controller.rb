@@ -1,6 +1,6 @@
 module Api
   class PagesController < ApplicationController
-    before_action :set_page, only: [:show, :edit, :update, :destroy]
+    before_action :set_page, only: [:show, :update, :destroy]
     before_filter :require_api_key
     #CSRF token not necessary for json api
     skip_before_filter :verify_authenticity_token
@@ -12,6 +12,10 @@ module Api
       @pages = data_cache('pages', 10.minutes) do
         Page.all
       end
+      respond_to do |format|
+        format.json { render action: 'index', status: :ok, location: api_pages_url(@pages) }
+        format.xml { render xml: @pages, location: api_pages_url(@pages) }
+      end
     end
 
     # GET /pages/1
@@ -21,15 +25,10 @@ module Api
       @page = data_cache("page-#{@page.id}", 1.hour) do
         Page.find(params[:id])
       end
-    end
-
-    # GET /pages/new
-    def new
-      @page = Page.new
-    end
-
-    # GET /pages/1/edit
-    def edit
+      respond_to do |format|
+        format.json { render action: 'show', status: :ok, location: api_page_url(@page) }
+        format.xml { render xml: @page, location: api_page_url(@page) }
+      end
     end
 
     # POST /pages
@@ -37,13 +36,16 @@ module Api
     def create
       #Each Page could be tied to an ApiKey or set of ApiKeys for security
       @page = Page.new(page_params)
+      #Render the object created or errors
       respond_to do |format|
         if @page.save
           #Cache bust pages
           Rails.cache.delete("pages")
           format.json { render action: 'show', status: :created, location: api_page_url(@page) }
+          format.xml { render xml: @page, location: api_page_url(@page) }
         else
           format.json { render json: @page.errors, status: :unprocessable_entity }
+          format.xml { render xml: @page.errors }
         end
       end
     end
@@ -51,14 +53,17 @@ module Api
     # PATCH/PUT /pages/1
     # PATCH/PUT /pages/1.json
     def update
+      #Render the object created or errors
       respond_to do |format|
         if @page.update(page_params)
           #Cache bust pages and updated page. With pagination we would only bust the cache of the page that was updated.
           Rails.cache.delete("pages")
           Rails.cache.delete("page-#{@page.id}")
           format.json { render action: 'show', status: :ok, location: api_page_url(@page) }
+          format.xml { render xml: @page, location: api_page_url(@page) }
         else
           format.json { render json: @page.errors, status: :unprocessable_entity }
+          format.xml { render xml: @page.errors }
         end
       end
     end
