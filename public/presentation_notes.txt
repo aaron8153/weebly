@@ -1,0 +1,70 @@
+USERS
+
+1 - Create user using localhost:3000/
+	Secret Token:  REPLACE_ME_WITH_REAL_TOKEN
+
+2 - Try to create a page using the incorrect token, should fail
+	curl --data "page[title]=Page 1 - Title" http://localhost:3000/api/pages.json -H 'Authorization: Token token="not_a_real_token"'
+
+
+PAGES
+
+3 - Create a page
+	curl --data "page[title]=Page 1 - Title" http://localhost:3000/api/pages.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+4 - Create a second page
+	curl --data "page[title]=Page 2 - Title" http://localhost:3000/api/pages.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+5 - List all pages
+	curl http://localhost:3000/api/pages.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+6 - Get one page
+	curl http://localhost:3000/api/pages/1.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+7 - Update Page 1
+	curl -X PUT -d "page[title]=Page 1 - New Title" http://localhost:3000/api/pages/1.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+8 - Delete Page 2
+	curl -X DELETE http://localhost:3000/api/pages/2.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+9 - List all pages to confirm delete
+	curl http://localhost:3000/api/pages.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+ELEMENTS
+
+10 - Create a Title Element
+	curl --data "element[content_type]=TitleContent&element[page_id]=1&element[title_content][title]=Title Content On Page 1" http://localhost:3000/api/pages/1/elements.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+11 - Update Title Element
+	curl -X PUT -d "element[content_type]=TitleContent&element[page_id]=1&element[title_content][title]=Updated Title Content on Page 1" http://localhost:3000/api/pages/1/elements/1.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+12 - Create Text Element
+	curl --data "element[content_type]=TextContent&element[page_id]=1&element[text_content][text]=Text Content On Page 1" http://localhost:3000/api/pages/1/elements.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+13 - Update Text Element
+	curl -X PUT -d "element[content_type]=TextContent&element[page_id]=1&element[text_content][text]=Updated Title Content on Page 1" http://localhost:3000/api/pages/1/elements/2.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+14 - Create Image Element
+	curl --data "element[content_type]=ImageContent&element[page_id]=1&element[image_content][uri]=https://upload.wikimedia.org/wikipedia/commons/4/47/Space-cadet.jpg" http://localhost:3000/api/pages/1/elements.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+15 - Update Image Element
+	curl -X PUT -d "element[content_type]=ImageContent&element[page_id]=1&element[image_content][uri]=http://www.quietpc.com/images/products/matias-quiet-pro-keyboards-2-large.jpg" http://localhost:3000/api/pages/1/elements/3.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+16 - List All Elements on a Page
+	curl http://localhost:3000/api/pages/1/elements.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+17 - Get One Element on a Page
+	curl http://localhost:3000/api/pages/1/elements/1.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+18 - Show that 17 wrote to the cache and that subsequent loads fetch from the cache
+	curl http://localhost:3000/api/pages/1/elements/1.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+18 - Delete Element
+	curl -X DELETE http://localhost:3000/api/pages/1/elements/1.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+19 - Verify Delete worked
+	curl http://localhost:3000/api/pages/1/elements.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+
+20 - Show Formatting - JSON and XML
+	curl http://localhost:3000/api/pages/1/elements.json -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
+	curl http://localhost:3000/api/pages/1/elements.xml -H 'Authorization: Token token="REPLACE_ME_WITH_REAL_TOKEN"'
