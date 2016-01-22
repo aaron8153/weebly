@@ -1,18 +1,25 @@
 module Api
   class PagesController < ApplicationController
     before_action :set_page, only: [:show, :edit, :update, :destroy]
-    #before_filter :require_api_key
+    before_filter :require_api_key
     skip_before_filter :verify_authenticity_token
 
     # GET /pages
     # GET /pages.json
     def index
-      @pages = Page.all
+      #Page.all is fine for small sets of data, for larger sets pagination would be best
+      @pages = data_cache('pages', 10.minutes) do
+        Page.all
+      end
     end
 
     # GET /pages/1
     # GET /pages/1.json
     def show
+      #Page data isn't updated very frequently so a longer cache time is acceptable
+      @page = data_cache("page-#{@page.id}", 1.hour) do
+        Page.find(params[:id])
+      end
     end
 
     # GET /pages/new
@@ -28,13 +35,12 @@ module Api
     # POST /pages.json
     def create
       @page = Page.new(page_params)
-
       respond_to do |format|
         if @page.save
-          format.html { redirect_to [:api, @page], notice: 'Page was successfully created.' }
+          #Cache bust pages
+          Rails.cache.delete("pages")
           format.json { render action: 'show', status: :created, location: api_page_url(@page) }
         else
-          format.html { render action: 'new' }
           format.json { render json: @page.errors, status: :unprocessable_entity }
         end
       end
@@ -45,10 +51,11 @@ module Api
     def update
       respond_to do |format|
         if @page.update(page_params)
-          format.html { redirect_to @page, notice: 'Page was successfully updated.' }
-          format.json { head :no_content }
+          #Cache bust pages and updated page. With pagination we would only bust the cache of the page that was updated.
+          Rails.cache.delete("pages")
+          Rails.cache.delete("page-#{@page.id}")
+          format.json { render action: 'show', status: :ok, location: api_page_url(@page) }
         else
-          format.html { render action: 'edit' }
           format.json { render json: @page.errors, status: :unprocessable_entity }
         end
       end
@@ -58,8 +65,10 @@ module Api
     # DELETE /pages/1.json
     def destroy
       @page.destroy
+      #Cache bust pages and individual page. With pagination we would only bust the cache on the paginated "pages" key.
+      Rails.cache.delete("pages")
+      Rails.cache.delete("page-#{@page.id}")
       respond_to do |format|
-        format.html { redirect_to api_pages_url }
         format.json { head :no_content }
       end
     end

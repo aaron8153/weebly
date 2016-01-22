@@ -1,18 +1,25 @@
 module Api
   class ElementsController < ApplicationController
     before_action :set_element, only: [:show, :edit, :update, :destroy]
-    #before_filter :require_api_key
+    before_filter :require_api_key
     skip_before_filter :verify_authenticity_token
 
     # GET /elements
     # GET /elements.json
     def index
-      @elements = Element.all
+      #Element.all is fine for small sets of data, for larger sets pagination would be best
+      @elements = data_cache("page-#{params[:page_id]}-elements", 10.minutes) do
+        Element.all
+      end
     end
 
     # GET /elements/1
     # GET /elements/1.json
     def show
+      #Elements are likely to change more frequently than pages so 10 min should be good
+      @element = data_cache("element-#{@element.id}", 10.minutes) do
+        Element.find(params[:id])
+      end
     end
 
     # GET /elements/new
@@ -28,23 +35,24 @@ module Api
     # POST /elements.json
     def create
       @element = Element.new(element_params)
+      #Use new instead of create, will be saved when @element.save is called
       case @element.content_type
         when 'TitleContent'
-          @element.content = TitleContent.create(title: params['element']['title_content']['title'])
+          @element.content = TitleContent.new(title: params['element']['title_content']['title'])
         when 'TextContent'
-          @element.content = TextContent.create(text: params['element']['text_content']['text'])
+          @element.content = TextContent.new(text: params['element']['text_content']['text'])
         when 'ImageContent'
-          @element.content = ImageContent.create(uri: params['element']['image_content']['uri'])
+          @element.content = ImageContent.new(uri: params['element']['image_content']['uri'])
         when 'NavContent'
-          #blah
+          #Placeholder for NavContent
       end
 
       respond_to do |format|
         if @element.save
-          format.html { redirect_to api_page_element_path(params[:page_id], @element), notice: 'Element was successfully created.' }
+          #Cache bust elements
+          Rails.cache.delete("page-#{params[:page_id]}-elements")
           format.json { render action: 'show', status: :created, location: api_page_element_url(params[:page_id], @element) }
         else
-          format.html { render action: 'new' }
           format.json { render json: @element.errors, status: :unprocessable_entity }
         end
       end
@@ -57,9 +65,9 @@ module Api
         when 'TitleContent'
           @element.content.update(title_content_params)
         when 'TextContent'
-          @element.content = TextContent.create(text: params['element']['text_content']['text'])
+          @element.content.update(text_content_params)
         when 'ImageContent'
-          @element.content = ImageContent.create(uri: params['element']['image_content']['uri'])
+          @element.content.update(image_content_params)
         when 'NavContent'
           #blah
       end
@@ -68,18 +76,21 @@ module Api
         case @element.content_type
           when 'TitleContent'
             if @element.content.update(title_content_params)
+              bust_cache_on_update(@element)
               format.json { render action: 'show', status: :ok, location: api_page_element_url(params[:page_id], @element) }
             else
               format.json { render json: @element.errors, status: :unprocessable_entity }
             end
           when 'TextContent'
             if @element.content.update(text_content_params)
+              bust_cache_on_update(@element)
               format.json { render action: 'show', status: :ok, location: api_page_element_url(params[:page_id], @element) }
             else
               format.json { render json: @element.errors, status: :unprocessable_entity }
             end
           when 'ImageContent'
             if @element.content.update(image_content_params)
+              bust_cache_on_update(@element)
               format.json { render action: 'show', status: :ok, location: api_page_element_url(params[:page_id], @element) }
             else
               format.json { render json: @element.errors, status: :unprocessable_entity }
@@ -88,10 +99,9 @@ module Api
             #blah
           else
             if @element.update(element_params)
-              format.html { redirect_to @element, notice: 'Element was successfully updated.' }
+              bust_cache_on_update(@element)
               format.json { head :no_content }
             else
-              format.html { render action: 'edit' }
               format.json { render json: @element.errors, status: :unprocessable_entity }
             end
         end
@@ -106,7 +116,6 @@ module Api
       @element.content.destroy
       @element.destroy
       respond_to do |format|
-        format.html { redirect_to elements_url }
         format.json { head :no_content }
       end
     end
@@ -142,6 +151,12 @@ module Api
         authenticate_or_request_with_http_token do |token, options|
           ApiKey.exists?(access_token: token)
         end
+      end
+
+      def bust_cache_on_update(element)
+        #Cache bust elements and updated element
+        Rails.cache.delete("page-#{params[:page_id]}-elements")
+        Rails.cache.delete("element-#{element.id}")
       end
   end
 end
