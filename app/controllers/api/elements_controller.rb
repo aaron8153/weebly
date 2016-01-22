@@ -2,6 +2,7 @@ module Api
   class ElementsController < ApplicationController
     before_action :set_element, only: [:show, :edit, :update, :destroy]
     before_filter :require_api_key
+    #CSRF token not necessary for json api
     skip_before_filter :verify_authenticity_token
 
     # GET /elements
@@ -34,6 +35,7 @@ module Api
     # POST /elements
     # POST /elements.json
     def create
+      #Each element could be tied to an ApiKey or set of ApiKeys for security
       @element = Element.new(element_params)
       #Use new instead of create, will be saved when @element.save is called
       case @element.content_type
@@ -96,7 +98,7 @@ module Api
               format.json { render json: @element.errors, status: :unprocessable_entity }
             end
           when 'NavContent'
-            #blah
+            #Placeholder for updating NavContent
           else
             if @element.update(element_params)
               bust_cache_on_update(@element)

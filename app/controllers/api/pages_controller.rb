@@ -2,6 +2,7 @@ module Api
   class PagesController < ApplicationController
     before_action :set_page, only: [:show, :edit, :update, :destroy]
     before_filter :require_api_key
+    #CSRF token not necessary for json api
     skip_before_filter :verify_authenticity_token
 
     # GET /pages
@@ -34,6 +35,7 @@ module Api
     # POST /pages
     # POST /pages.json
     def create
+      #Each Page could be tied to an ApiKey or set of ApiKeys for security
       @page = Page.new(page_params)
       respond_to do |format|
         if @page.save
